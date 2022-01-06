@@ -23,6 +23,13 @@ You require the following to build Netty:
 
 Note that this is build-time requirement.  JDK 5 (for 3.x) or 6 (for 4.0+ / 4.1+) is enough to run your Netty-based application.
 
+### macOS Monterey 12.1
+编译步骤：
+1. brew install autoconf automake libtool
+2. mvn clean package -DskipTests=true
+
+更新时间：2022-01-06 13:51
+
 ## Branches to look
 
 Development of all versions takes place in each branch whose name is identical to `<majorVersion>.<minorVersion>`.  For example, the development of 3.9 and 4.1 resides in [the branch '3.9'](https://github.com/netty/netty/tree/3.9) and [the branch '4.1'](https://github.com/netty/netty/tree/4.1) respectively.
