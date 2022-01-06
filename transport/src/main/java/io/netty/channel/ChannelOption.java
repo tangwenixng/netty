@@ -27,8 +27,8 @@ import java.net.NetworkInterface;
  * A {@link ChannelOption} allows to configure a {@link ChannelConfig} in a type-safe
  * way. Which {@link ChannelOption} is supported depends on the actual implementation
  * of {@link ChannelConfig} and may depend on the nature of the transport it belongs
- * to.
- *
+ * to.<br />
+ * 各个option意义可以参考: https://www.cnblogs.com/it-worker365/p/9970421.html
  * @param <T>   the type of the value which is valid for the {@link ChannelOption}
  */
 public class ChannelOption<T> extends AbstractConstant<ChannelOption<T>> {
@@ -112,12 +112,29 @@ public class ChannelOption<T> extends AbstractConstant<ChannelOption<T>> {
     public static final ChannelOption<Boolean> AUTO_CLOSE = valueOf("AUTO_CLOSE");
 
     public static final ChannelOption<Boolean> SO_BROADCAST = valueOf("SO_BROADCAST");
+    /**
+     * 对应于套接字选项中的SO_KEEPALIVE，该参数用于设置TCP连接，当设置该选项以后，连接会测试链接的状态
+     */
     public static final ChannelOption<Boolean> SO_KEEPALIVE = valueOf("SO_KEEPALIVE");
     public static final ChannelOption<Integer> SO_SNDBUF = valueOf("SO_SNDBUF");
     public static final ChannelOption<Integer> SO_RCVBUF = valueOf("SO_RCVBUF");
+    /**
+     * 对应于套接字选项中的SO_REUSEADDR，这个参数表示允许重复使用本地地址和端口;<br />
+     * 某个进程非正常退出，该程序占用的端口可能要被占用一段时间才能允许其他进程使用,
+     * 而且程序死掉以后，内核一需要一定的时间才能够释放此端口
+     */
     public static final ChannelOption<Boolean> SO_REUSEADDR = valueOf("SO_REUSEADDR");
     public static final ChannelOption<Integer> SO_LINGER = valueOf("SO_LINGER");
+    /**
+     * tcp/ip协议listen函数中的backlog参数,初始化服务端可连接队列;指定队列的大小<br />
+     * SO: socket
+     */
     public static final ChannelOption<Integer> SO_BACKLOG = valueOf("SO_BACKLOG");
+    /**
+     * 设置接受数据的等待的超时时间，单位为毫秒，它的默认值是0，表示无限等待。<br />
+     * 设置socket调用InputStream读数据的超时时间.<br />
+     * 会影响如下方法：ServerSocket.accept(); SocketInputStream.read() DatagramSocket.receive()
+     */
     public static final ChannelOption<Integer> SO_TIMEOUT = valueOf("SO_TIMEOUT");
 
     public static final ChannelOption<Integer> IP_TOS = valueOf("IP_TOS");
@@ -125,7 +142,11 @@ public class ChannelOption<T> extends AbstractConstant<ChannelOption<T>> {
     public static final ChannelOption<NetworkInterface> IP_MULTICAST_IF = valueOf("IP_MULTICAST_IF");
     public static final ChannelOption<Integer> IP_MULTICAST_TTL = valueOf("IP_MULTICAST_TTL");
     public static final ChannelOption<Boolean> IP_MULTICAST_LOOP_DISABLED = valueOf("IP_MULTICAST_LOOP_DISABLED");
-
+    /**
+     * 对应于套接字选项中的TCP_NODELAY;<br>
+     * 该参数的作用是禁止使用Nagle算法，适用于小数据即时传输;<br>
+     * 和TCP_NODELAY相对应的是TCP_CORK，该选项是需要等到发送的数据量最大的时候，一次性发送数据，适用于文件传输
+     */
     public static final ChannelOption<Boolean> TCP_NODELAY = valueOf("TCP_NODELAY");
     /**
      * Client-side TCP FastOpen. Sending data with the initial TCP handshake.
