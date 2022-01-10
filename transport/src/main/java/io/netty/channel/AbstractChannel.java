@@ -47,6 +47,9 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
     private final Channel parent;
     private final ChannelId id;
     private final Unsafe unsafe;
+    /**
+     * DefaultChannelPipeline实现，在哪里赋值/设置的？
+     */
     private final DefaultChannelPipeline pipeline;
     private final VoidChannelPromise unsafeVoidPromise = new VoidChannelPromise(this, false);
     private final CloseFuture closeFuture = new CloseFuture(this);
@@ -149,7 +152,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
     @Override
     public ChannelPipeline pipeline() {
-        return pipeline;
+        return pipeline;//DefaultChannelPipeline实现，在哪里赋值/设置的？
     }
 
     @Override
@@ -473,9 +476,10 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                         new IllegalStateException("incompatible event loop type: " + eventLoop.getClass().getName()));
                 return;
             }
-
+            //再次提醒:此eventLoop是【next()返回EventLoop】的
             AbstractChannel.this.eventLoop = eventLoop;
 
+            //thread(当前线程) == this.thread;
             if (eventLoop.inEventLoop()) {
                 register0(promise);
             } else {

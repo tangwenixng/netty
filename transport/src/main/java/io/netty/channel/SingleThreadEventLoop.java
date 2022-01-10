@@ -78,12 +78,16 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
 
     @Override
     public ChannelFuture register(Channel channel) {
+        //注意，这里new DefaultChannelPromise，也就是最后的返回值；
+        // important: 这个promise会被传递到eventLoop线程池中
         return register(new DefaultChannelPromise(channel, this));
     }
 
     @Override
     public ChannelFuture register(final ChannelPromise promise) {
         ObjectUtil.checkNotNull(promise, "promise");
+        //注意，调用的是channel的unsafe的注册方法;
+        // unsafe对象是AbstractNioMessageChannel.NioMessageUnsafe
         promise.channel().unsafe().register(this, promise);
         return promise;
     }

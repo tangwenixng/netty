@@ -71,6 +71,7 @@ public final class EchoServer {
              });
 
             // Start the server.
+            //f是AbstractBootstrap.PendingRegistrationPromise的实例
             ChannelFuture f = b.bind(PORT).sync();
 
             // Wait until the server socket is closed.
