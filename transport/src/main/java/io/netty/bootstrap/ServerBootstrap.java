@@ -52,6 +52,9 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
     private final Map<AttributeKey<?>, Object> childAttrs = new ConcurrentHashMap<AttributeKey<?>, Object>();
     private final ServerBootstrapConfig config = new ServerBootstrapConfig(this);
     private volatile EventLoopGroup childGroup;
+    /**
+     * 就是启动类中设置的childHandler(new ChannelInitializer<SocketChannel>() {}
+     */
     private volatile ChannelHandler childHandler;
 
     public ServerBootstrap() { }
@@ -129,7 +132,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
 
     @Override
     void init(Channel channel) {
-        setChannelOptions(channel, newOptionsArray(), logger);
+        setChannelOptions(channel, newOptionsArray(), logger);//给当前这个channel设置OPTION
         setAttributes(channel, newAttributesArray());
 
         ChannelPipeline p = channel.pipeline();
@@ -143,6 +146,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
             @Override
             public void initChannel(final Channel ch) {
                 final ChannelPipeline pipeline = ch.pipeline();
+                //handler(new LoggingHandler(LogLevel.INFO))
                 ChannelHandler handler = config.handler();
                 if (handler != null) {
                     pipeline.addLast(handler);

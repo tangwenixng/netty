@@ -49,7 +49,9 @@ public abstract class AbstractNioChannel extends AbstractChannel {
 
     private static final InternalLogger logger =
             InternalLoggerFactory.getInstance(AbstractNioChannel.class);
-
+    /**
+     * 指向jdk的ServerSocketChannel
+     */
     private final SelectableChannel ch;
     protected final int readInterestOp;
     volatile SelectionKey selectionKey;
@@ -78,10 +80,10 @@ public abstract class AbstractNioChannel extends AbstractChannel {
      */
     protected AbstractNioChannel(Channel parent, SelectableChannel ch, int readInterestOp) {
         super(parent);
-        this.ch = ch;
-        this.readInterestOp = readInterestOp;
+        this.ch = ch;//SelectableChannel ch指向jdk的ServerSocketChannel
+        this.readInterestOp = readInterestOp;//感兴趣的事SelectionKey.OP_ACCEPT
         try {
-            ch.configureBlocking(false);
+            ch.configureBlocking(false);//配置为非阻塞
         } catch (IOException e) {
             try {
                 ch.close();

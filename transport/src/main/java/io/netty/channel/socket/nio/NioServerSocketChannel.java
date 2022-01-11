@@ -72,6 +72,8 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
      * Create a new instance
      */
     public NioServerSocketChannel() {
+        //channel = channelFactory.newChannel();会进入到这里;
+        // newSocket(DEFAULT_SELECTOR_PROVIDER)返回的是jdk的serverSocketChannel
         this(newSocket(DEFAULT_SELECTOR_PROVIDER));
     }
 

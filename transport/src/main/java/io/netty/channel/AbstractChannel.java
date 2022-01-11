@@ -46,6 +46,9 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
     private final Channel parent;
     private final ChannelId id;
+    /**
+     * unsafe是AbstractNioMessageChannel.NioMessageUnsafe实例
+     */
     private final Unsafe unsafe;
     /**
      * DefaultChannelPipeline实现，在哪里赋值/设置的？
@@ -75,7 +78,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
         this.parent = parent;
         id = newId();
         unsafe = newUnsafe();
-        pipeline = newChannelPipeline();
+        pipeline = newChannelPipeline();//在这里创建了channelPipeline
     }
 
     /**
