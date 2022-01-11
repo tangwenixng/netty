@@ -112,7 +112,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
      * The NIO {@link Selector}.
      */
     private Selector selector;
-    private Selector unwrappedSelector;
+    private Selector unwrappedSelector;//这是哪里设置的？
     private SelectedSelectionKeySet selectedKeys;
 
     private final SelectorProvider provider;

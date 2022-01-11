@@ -71,7 +71,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     protected MultithreadEventExecutorGroup(int nThreads, Executor executor,
                                             EventExecutorChooserFactory chooserFactory, Object... args) {
         checkPositive(nThreads, "nThreads");
-
+        //args are [selectorProvider, selectStrategyFactory, RejectedExecutionHandlers.reject()]
         if (executor == null) {
             executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());
         }
@@ -81,7 +81,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         for (int i = 0; i < nThreads; i ++) {
             boolean success = false;
             try {
-                children[i] = newChild(executor, args);
+                children[i] = newChild(executor, args);//children[i]存储的是NioEventLoop
                 success = true;
             } catch (Exception e) {
                 // TODO: Think about if this is a good exception type
@@ -107,9 +107,9 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
                 }
             }
         }
-
+        //根据children的长度选择不同的EventExecutorChooser（策略模式）
         chooser = chooserFactory.newChooser(children);
-
+        //EventExecutor结束时的回调函数
         final FutureListener<Object> terminationListener = new FutureListener<Object>() {
             @Override
             public void operationComplete(Future<Object> future) throws Exception {

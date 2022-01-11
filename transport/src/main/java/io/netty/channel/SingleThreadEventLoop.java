@@ -78,7 +78,7 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
 
     @Override
     public ChannelFuture register(Channel channel) {
-        //注意，这里new DefaultChannelPromise，也就是最后的返回值；
+        //注意，这里new DefaultChannelPromise，也就是最后(bind方法)的返回值；
         // important: 这个promise会被传递到eventLoop线程池中
         return register(new DefaultChannelPromise(channel, this));
     }
