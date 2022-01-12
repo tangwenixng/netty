@@ -490,6 +490,8 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                     eventLoop.execute(new Runnable() {
                         @Override
                         public void run() {
+                            //这个 register 任务会进入到 NioEventLoop 的 taskQueue 中，即（SingleThreadEventExecutor.execute(java.lang.Runnable, boolean)=>addTask(task);）
+                            // 然后会启动 NioEventLoop 中的线程，该线程会轮询这个 taskQueue，然后执行这个 register 任务
                             register0(promise);
                         }
                     });
@@ -517,7 +519,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 //真正的注册在AbstractNioChannel.doRegister里面的javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
                 doRegister();
                 neverRegistered = false;
-                registered = true;
+                registered = true;// 到这里，就算是 registered 了
 
                 // Ensure we call handlerAdded(...) before we actually notify the promise. This is needed as the
                 // user may already fire events through the pipeline in the ChannelFutureListener.

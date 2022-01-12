@@ -126,7 +126,7 @@ public abstract class ChannelInitializer<C extends Channel> extends ChannelInbou
     private boolean initChannel(ChannelHandlerContext ctx) throws Exception {
         if (initMap.add(ctx)) { // Guard against re-entrance.
             try {
-                initChannel((C) ctx.channel());
+                initChannel((C) ctx.channel());//这就是ChannelInitializer的initChannel方法，我们初始化经常会添加handler的那个方法
             } catch (Throwable cause) {
                 // Explicitly call exceptionCaught(...) as we removed the handler before calling initChannel(...).
                 // We do so to prevent multiple calls to initChannel(...).
@@ -134,7 +134,8 @@ public abstract class ChannelInitializer<C extends Channel> extends ChannelInbou
             } finally {
                 ChannelPipeline pipeline = ctx.pipeline();
                 if (pipeline.context(this) != null) {
-                    pipeline.remove(this);
+                    //this指的是ChannelInitializer对象，即io.netty.bootstrap.ServerBootstrap=>p.addLast(new ChannelInitializer<Channel>() {})
+                    pipeline.remove(this);//将 ChannelInitializer 实例从 pipeline 中删除
                 }
             }
             return true;

@@ -143,6 +143,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         final Entry<AttributeKey<?>, Object>[] currentChildAttrs = newAttributesArray(childAttrs);
         //什么时候会被回调？
         //AbstractChannel#register0()里的pipeline.invokeHandlerAddedIfNeeded();
+        //ChannelInitializer实现了ChannelInboundHandler接口,所以可以插入到pipeline中
         p.addLast(new ChannelInitializer<Channel>() {
             @Override
             public void initChannel(final Channel ch) {
@@ -157,7 +158,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
                     @Override
                     public void run() {
                         pipeline.addLast(new ServerBootstrapAcceptor(
-                                ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));
+                                ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));//这里也挺关键的
                     }
                 });
             }
