@@ -431,9 +431,13 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         }
     }
 
+    /**
+     * 这里是事件循环的核心
+     */
     @Override
     protected void run() {
         int selectCnt = 0;
+        //注意：这里是个无限循环！！！
         for (;;) {
             try {
                 int strategy;

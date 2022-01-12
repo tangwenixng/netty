@@ -833,6 +833,8 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
 
     private void execute(Runnable task, boolean immediate) {
         boolean inEventLoop = inEventLoop();
+        //添加任务到taskQueue中
+        //如果 taskQueue 满了(默认大小 16)，根默认的策略是抛出异常
         addTask(task);
         if (!inEventLoop) {
             startThread();
@@ -983,9 +985,14 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
 
     private void doStartThread() {
         assert thread == null;
+        //executor.execute()实际是ThreadPerTaskExecutor#execute()，
+        // 内容是threadFactory.newThread(command).start();其实就是新建线程
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                //将 “executor” 中创建的这个线程设置为 NioEventLoop 的线程！！！
+                //这里挺难理解的！！！Thread.currentThread()其实就是threadFactory.newThread(command)出来的线程
+                //经过这一步之后io.netty.util.concurrent.AbstractEventExecutor.inEventLoop()就可以比较了
                 thread = Thread.currentThread();
                 if (interrupted) {
                     thread.interrupt();
@@ -994,6 +1001,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
                 boolean success = false;
                 updateLastExecutionTime();
                 try {
+                    //在NioEventLoop中实现了
                     SingleThreadEventExecutor.this.run();
                     success = true;
                 } catch (Throwable t) {
