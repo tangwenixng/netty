@@ -141,7 +141,8 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         final ChannelHandler currentChildHandler = childHandler;
         final Entry<ChannelOption<?>, Object>[] currentChildOptions = newOptionsArray(childOptions);
         final Entry<AttributeKey<?>, Object>[] currentChildAttrs = newAttributesArray(childAttrs);
-
+        //什么时候会被回调？
+        //AbstractChannel#register0()里的pipeline.invokeHandlerAddedIfNeeded();
         p.addLast(new ChannelInitializer<Channel>() {
             @Override
             public void initChannel(final Channel ch) {

@@ -79,6 +79,17 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
     private volatile Thread thread;
     @SuppressWarnings("unused")
     private volatile ThreadProperties threadProperties;
+    /**
+     * this.executor包装了ThreadPerTaskExecutor;最终执行者是ThreadPerTaskExecutor;
+     * 执行内容是:
+     *
+     * setCurrentEventExecutor(eventExecutor);
+     * try {
+     *   command.run();
+     *  } finally {
+     *   setCurrentEventExecutor(null);
+     * }
+     */
     private final Executor executor;
     private volatile boolean interrupted;
 

@@ -507,19 +507,24 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
         private void register0(ChannelPromise promise) {
             try {
                 // check if the channel is still open as it could be closed in the mean time when the register
-                // call was outside of the eventLoop
+                // call was outside of the eventLoop;
+                //再次提醒: promise是SingleThreadEventLoop.register(Channel)中的
+                // register(new DefaultChannelPromise(channel, this))
                 if (!promise.setUncancellable() || !ensureOpen(promise)) {
                     return;
                 }
                 boolean firstRegistration = neverRegistered;
+                //真正的注册在AbstractNioChannel.doRegister里面的javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
                 doRegister();
                 neverRegistered = false;
                 registered = true;
 
                 // Ensure we call handlerAdded(...) before we actually notify the promise. This is needed as the
                 // user may already fire events through the pipeline in the ChannelFutureListener.
-                pipeline.invokeHandlerAddedIfNeeded();//todo 留着看
-
+                //todo 留着看;
+                // 会触发ServerBootstrap.init中 pipeline.addLast()
+                pipeline.invokeHandlerAddedIfNeeded();
+                //这里标记通道注册成功，通知监听器
                 safeSetSuccess(promise);
                 pipeline.fireChannelRegistered();
                 // Only fire a channelActive if the channel has never been registered. This prevents firing
