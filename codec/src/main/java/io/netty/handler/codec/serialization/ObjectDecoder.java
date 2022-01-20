@@ -26,7 +26,7 @@ import java.io.StreamCorruptedException;
 
 /**
  * A decoder which deserializes the received {@link ByteBuf}s into Java
- * objects.
+ * objects.将接收到的ByteBuf解码为Java对象
  * <p>
  * Please note that the serialized form this decoder expects is not
  * compatible with the standard {@link ObjectOutputStream}.  Please use

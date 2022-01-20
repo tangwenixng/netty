@@ -39,7 +39,7 @@ public class ObjectEncoder extends MessageToByteEncoder<Serializable> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Serializable msg, ByteBuf out) throws Exception {
-        int startIdx = out.writerIndex();
+        int startIdx = out.writerIndex();//startIdx=0
 
         ByteBufOutputStream bout = new ByteBufOutputStream(out);
         ObjectOutputStream oout = null;
@@ -57,7 +57,7 @@ public class ObjectEncoder extends MessageToByteEncoder<Serializable> {
         }
 
         int endIdx = out.writerIndex();
-
+        //(endIdx - startIdx - 4) 实际对象的字节数
         out.setInt(startIdx, endIdx - startIdx - 4);
     }
 }

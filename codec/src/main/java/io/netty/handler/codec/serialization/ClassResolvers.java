@@ -25,6 +25,7 @@ public final class ClassResolvers {
     /**
      * cache disabled
      * @param classLoader - specific classLoader to use, or null if you want to revert to default
+     *                    如果是NULL,使用默认的类加载器-AppClassLoader
      * @return new instance of class resolver
      */
     public static ClassResolver cacheDisabled(ClassLoader classLoader) {

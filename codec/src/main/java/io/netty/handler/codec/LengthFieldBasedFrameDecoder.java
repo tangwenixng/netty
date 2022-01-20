@@ -192,6 +192,9 @@ public class LengthFieldBasedFrameDecoder extends ByteToMessageDecoder {
     private final int lengthFieldLength;
     private final int lengthFieldEndOffset;
     private final int lengthAdjustment;
+    /**
+     * 要剥离的初始字节
+     */
     private final int initialBytesToStrip;
     private final boolean failFast;
     private boolean discardingTooLongFrame;
